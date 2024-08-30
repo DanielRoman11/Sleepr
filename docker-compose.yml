@@ -24,5 +24,3 @@ services:
       - .env
     depends_on:
       - mongo
-    stdin_open: true
-    tty: true

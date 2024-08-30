@@ -4,7 +4,7 @@ RUN npm install -g pnpm
 WORKDIR /usr/src/app
 COPY . .
 
-RUN pnpm install
+RUN pnpm i
 RUN pnpm config set store-dir ~/.pnpm-store
 COPY . .
 
