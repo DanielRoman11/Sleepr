@@ -1,30 +1,21 @@
-version: '3.1'
-
+version: '3.9'
 services:
-  mongo:
-    image: mongo:latest
-    container_name: mongo
-    restart: always
-    ports:
-      - 27017:27017
-    environment:
-      - MONGO_INITDB_DATABASE=sleepr
-    volumes:
-      - mongo-data:/data/db
-
-  node-app:
+  reservations:
     build:
       context: .
-      dockerfile: Dockerfile
-    container_name: node-app
-    volumes:
-      - .:/usr/src/app
+      dockerfile: ./apps/reservations/Dockerfile
+      target: development
+    command: sh -c "pnpm i && pnpm start:dev"
     ports:
       - 3000:3000
+    volumes:
+      - .:/usr/src/app/
+      - /usr/src/app/node_modules
     env_file:
       - .env
-    depends_on:
-      - mongo
+    networks:
+      - app-network
 
-volumes:
-  mongo-data:
+networks:
+  app-network:
+    driver: bridge
