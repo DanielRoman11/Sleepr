@@ -12,7 +12,7 @@ export class ReservationsService {
     return await this.reservationRepo.create({
       ...createReservationDto,
       timestamp: new Date(),
-			userId: '12345'
+      userId: '12345',
     });
   }
 
@@ -24,14 +24,14 @@ export class ReservationsService {
     return await this.reservationRepo.findOne({});
   }
 
-  update(_id: string, updateReservationDto: UpdateReservationDto) {
-    return this.reservationRepo.findOneAndUpdate(
+  async update(_id: string, updateReservationDto: UpdateReservationDto) {
+    return await this.reservationRepo.findOneAndUpdate(
       { _id },
       { $set: updateReservationDto },
     );
   }
 
-  remove(_id: string) {
-    return this.reservationRepo.findOneAndDelete({ _id });
+  async remove(_id: string) {
+    return await this.reservationRepo.findOneAndDelete({ _id });
   }
 }
