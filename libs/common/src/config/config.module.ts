@@ -5,8 +5,6 @@ import {
 } from '@nestjs/config';
 import * as Joi from 'joi';
 
-console.log(process.env.MONGODB_URI);
-
 @Module({
   imports: [
     NestConfigModule.forRoot({

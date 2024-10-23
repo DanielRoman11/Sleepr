@@ -5,12 +5,11 @@ import { ConfigModule } from '../config/config.module';
 
 @Module({
   imports: [
-    // MongooseModule.forRoot("mongodb://mongo/sleepr")
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => {
         const uri = configService.get('MONGODB_URI');
-        console.log(uri);
+        // console.log(uri);
         return { uri };
       },
       inject: [ConfigService],
