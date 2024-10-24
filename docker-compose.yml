@@ -4,14 +4,23 @@ services:
       context: .
       dockerfile: ./apps/reservations/Dockerfile
       target: development
-    command: pnpm run start:dev reservations
+    command: pnpm start:dev reservations
     ports:
       - 3000:3000
     volumes:
       - .:/usr/src/app/
-    networks:
-      - app-network
+      - /usr/src/app/node_modules
 
-networks:
-  app-network:
-    driver: bridge
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    restart: always
+    ports:
+      - 27017:27017
+    environment:
+      - MONGO_INITDB_DATABASE=sleepr
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:
