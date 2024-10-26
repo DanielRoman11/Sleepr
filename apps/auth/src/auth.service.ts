@@ -1,8 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
+import { UserService } from './users/user.service';
 
 @Injectable()
 export class AuthService {
-  getHello(): string {
-    return 'Hello World!';
-  }
+  constructor(
+    @Inject()
+    private readonly userService: UserService,
+  ) {}
 }
