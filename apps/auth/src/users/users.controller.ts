@@ -12,6 +12,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UserService } from './user.service';
 import { UserDocument } from './models/users.schema';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { ObjectIdPipe } from '../pipes/objectId-validation.pipe';
 
 @Controller('users')
 export class UsersController {
@@ -30,17 +31,22 @@ export class UsersController {
   }
 
   @Get(':id')
-  findUser(@Param('id') id: string): Promise<UserDocument> {
+  findUser(@Param('id', new ObjectIdPipe()) id: string): Promise<UserDocument> {
     return this.userService.findOne(id);
   }
 
   @Patch(':id')
-  updateUser(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+  updateUser(
+    @Param('id', new ObjectIdPipe()) id: string,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
     return this.userService.update(id, updateUserDto);
   }
 
   @Delete(':id')
-  deleteUser(@Param('id') id: string): Promise<UserDocument> {
+  deleteUser(
+    @Param('id', new ObjectIdPipe()) id: string,
+  ): Promise<UserDocument> {
     return this.userService.delete(id);
   }
 }

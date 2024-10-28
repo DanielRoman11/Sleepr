@@ -1,4 +1,9 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  HttpException,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { UserRepository } from './user.repository';
 import { UserDocument } from './models/users.schema';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -25,8 +30,7 @@ export class UserService {
   }
 
   public async validateUser(username: string, pass: string): Promise<any> {
-    const user = await this.findOne(username);
-    if (!user) throw new NotFoundException('User not found');
+    const user = await this.findOneByEmail(username);
     if (await compare(pass, user.password)) {
       const { password, ...result } = user;
       return result;
@@ -34,8 +38,12 @@ export class UserService {
     return null;
   }
 
+  private async findOneByEmail(email: string): Promise<UserDocument> {
+    return await this.userRepo.findOne({ email });
+  }
+
   public async findOne(_id: string) {
-    return await this.userRepo.findOne({});
+    return await this.userRepo.findOne({ _id });
   }
 
   public async find(): Promise<UserDocument[]> {

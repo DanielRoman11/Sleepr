@@ -1,7 +1,13 @@
 import { Schema } from '@nestjs/mongoose';
 import { AbstractDocument } from './abstract.schema';
-import { FilterQuery, Model, Types, UpdateQuery } from 'mongoose';
-import { Logger, NotFoundException } from '@nestjs/common';
+import {
+  FilterQuery,
+  isObjectIdOrHexString,
+  Model,
+  Types,
+  UpdateQuery,
+} from 'mongoose';
+import { BadRequestException, Logger, NotFoundException } from '@nestjs/common';
 
 @Schema()
 export abstract class AbstractRepository<TDocument extends AbstractDocument> {
