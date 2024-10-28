@@ -1,9 +1,9 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { UserRepository } from './user.repository';
 import { UserDocument } from './models/users.schema';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { hash } from 'bcrypt';
+import { compare, hash } from 'bcryptjs';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
@@ -19,13 +19,27 @@ export class UserService {
       ...createUserDto,
       password: await hash(
         createUserDto.password,
-        Number(this.configService.get('HASH_ROUNDS')),
+        Number(this.configService.get<number>('HASH_ROUNDS')),
       ),
     });
   }
 
+  public async validateUser(username: string, pass: string): Promise<any> {
+    const user = await this.findOne(username);
+    if (!user) throw new NotFoundException('User not found');
+    if (await compare(pass, user.password)) {
+      const { password, ...result } = user;
+      return result;
+    }
+    return null;
+  }
+
   public async findOne(_id: string) {
     return await this.userRepo.findOne({});
+  }
+
+  public async find(): Promise<UserDocument[]> {
+    return await this.userRepo.find({});
   }
 
   public async update(_id: string, updateUserDto: UpdateUserDto) {
@@ -37,14 +51,5 @@ export class UserService {
 
   public async delete(_id: string) {
     return await this.userRepo.findOneAndDelete({ _id });
-  }
-
-  public async validateUser(username: string, pass: string): Promise<any> {
-    const user = await this.findOne(username);
-    if (user && user.password === pass) {
-      const { password, ...result } = user;
-      return result;
-    }
-    return null;
   }
 }
