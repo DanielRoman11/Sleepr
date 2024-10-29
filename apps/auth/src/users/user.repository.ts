@@ -10,8 +10,8 @@ export class UserRepository extends AbstractRepository<UserDocument> {
 
   constructor(
     @InjectModel(UserDocument.name)
-    reservationModel: Model<UserDocument>,
+    userModel: Model<UserDocument>,
   ) {
-    super(reservationModel);
+    super(userModel);
   }
 }
