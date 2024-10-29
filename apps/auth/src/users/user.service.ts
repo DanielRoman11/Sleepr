@@ -1,8 +1,7 @@
 import {
-  HttpException,
+  BadRequestException,
   Inject,
   Injectable,
-  NotFoundException,
 } from '@nestjs/common';
 import { UserRepository } from './user.repository';
 import { UserDocument } from './models/users.schema';
@@ -10,6 +9,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { compare, hash } from 'bcryptjs';
 import { ConfigService } from '@nestjs/config';
+import { GetUserDto } from './dto/get-user.dto';
 
 @Injectable()
 export class UserService {
@@ -20,6 +20,10 @@ export class UserService {
   ) {}
 
   public async create(createUserDto: CreateUserDto): Promise<UserDocument> {
+    try {
+      if (await this.findOneByEmail(createUserDto.email))
+        throw new BadRequestException('This email is already taken');
+    } catch {}
     return await this.userRepo.create({
       ...createUserDto,
       password: await hash(
@@ -44,6 +48,10 @@ export class UserService {
 
   public async findOne(_id: string) {
     return await this.userRepo.findOne({ _id });
+  }
+
+  async getUser(getUserDto: GetUserDto) {
+    return await this.userRepo.findOne({ ...getUserDto });
   }
 
   public async find(): Promise<UserDocument[]> {
