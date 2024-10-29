@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Inject,
   Injectable,
+  UnprocessableEntityException,
 } from '@nestjs/common';
 import { UserRepository } from './user.repository';
 import { UserDocument } from './models/users.schema';
@@ -20,10 +21,7 @@ export class UserService {
   ) {}
 
   public async create(createUserDto: CreateUserDto): Promise<UserDocument> {
-    try {
-      if (await this.findOneByEmail(createUserDto.email))
-        throw new BadRequestException('This email is already taken');
-    } catch {}
+    await this.isUserAlreadyExist(createUserDto.email);
     return await this.userRepo.create({
       ...createUserDto,
       password: await hash(
@@ -31,6 +29,15 @@ export class UserService {
         Number(this.configService.get<number>('HASH_ROUNDS')),
       ),
     });
+  }
+
+  private async isUserAlreadyExist(email: string) {
+    try {
+      await this.findOneByEmail(email);
+    } catch {
+      return;
+    }
+    throw new UnprocessableEntityException('This email is already taken');
   }
 
   public async validateUser(username: string, pass: string): Promise<any> {
