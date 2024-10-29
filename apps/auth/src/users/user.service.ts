@@ -31,7 +31,7 @@ export class UserService {
 
   public async validateUser(username: string, pass: string): Promise<any> {
     const user = await this.findOneByEmail(username);
-    if (await compare(pass, user.password)) {
+    if (user && (await compare(pass, user.password))) {
       const { password, ...result } = user;
       return result;
     }
