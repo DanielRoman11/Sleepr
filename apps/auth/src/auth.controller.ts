@@ -21,7 +21,7 @@ export class AuthController {
     res.send(user);
   }
 
-  @UseGuards(JwtAuthGuard)
-  @MessagePattern('authenticate')
-  async authenticate() {}
+  // @UseGuards(JwtAuthGuard)
+  // @MessagePattern('authenticate')
+  // async authenticate() {}
 }

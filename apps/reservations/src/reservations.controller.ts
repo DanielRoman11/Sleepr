@@ -12,13 +12,14 @@ import { ReservationsService } from './reservations.service';
 import { CreateReservationDto } from './dto/create-reservation.dto';
 import { UpdateReservationDto } from './dto/update-reservation.dto';
 import { JwtAuthGuard } from '@app/common';
+import { ObjectIdPipe } from './pipes/objectId-validation.pipe';
 
 @Controller('reservations')
 export class ReservationsController {
   constructor(private readonly reservationsService: ReservationsService) {}
 
-  @UseGuards(JwtAuthGuard)
   @Post()
+  @UseGuards(JwtAuthGuard)
   create(@Body() createReservationDto: CreateReservationDto) {
     return this.reservationsService.create(createReservationDto);
   }
@@ -29,20 +30,20 @@ export class ReservationsController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', new ObjectIdPipe()) id: string) {
     return this.reservationsService.findOne(id);
   }
 
   @Patch(':id')
   update(
-    @Param('id') id: string,
+    @Param('id', new ObjectIdPipe()) id: string,
     @Body() updateReservationDto: UpdateReservationDto,
   ) {
     return this.reservationsService.update(id, updateReservationDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id', new ObjectIdPipe()) id: string) {
     return this.reservationsService.remove(id);
   }
 }
