@@ -11,7 +11,7 @@ import {
 import { ReservationsService } from './reservations.service';
 import { CreateReservationDto } from './dto/create-reservation.dto';
 import { UpdateReservationDto } from './dto/update-reservation.dto';
-import { JwtAuthGuard } from '@app/common';
+import { CurrentUser, JwtAuthGuard } from '@app/common';
 import { ObjectIdPipe } from './pipes/objectId-validation.pipe';
 
 @Controller('reservations')
@@ -26,7 +26,8 @@ export class ReservationsController {
 
   @Get()
   @UseGuards(JwtAuthGuard)
-  findAll() {
+  findAll(@CurrentUser() user?) {
+    console.log('User from common: ', user);
     return this.reservationsService.findAll();
   }
 

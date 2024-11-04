@@ -15,7 +15,7 @@ import { UserDocument } from './models/users.schema';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ObjectIdPipe } from '../pipes/objectId-validation.pipe';
 import { JwtAuthGuard } from '../guard/jwt-auth.guard';
-import { CurrentUser } from '../current-user.decorator';
+import { CurrentUser } from '@app/common';
 
 @Controller('users')
 export class UsersController {
