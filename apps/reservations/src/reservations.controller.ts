@@ -20,41 +20,48 @@ export class ReservationsController {
 
   @Post()
   @UseGuards(JwtAuthGuard)
-  create(
+  async create(
     @Body() createReservationDto: CreateReservationDto,
     @CurrentUser() user?: UserDto,
   ) {
-    return this.reservationsService.create(createReservationDto, user._id);
+    return await this.reservationsService.create(
+      createReservationDto,
+      user._id,
+    );
   }
 
   @Get()
   @UseGuards(JwtAuthGuard)
-  findAll() {
-    return this.reservationsService.findAll();
+  async findAll() {
+    return await this.reservationsService.findAll();
   }
 
   @Get(':id')
   @UseGuards(JwtAuthGuard)
-  findOne(@Param('id', new ObjectIdPipe()) id: string) {
-    return this.reservationsService.findOne(id);
+  async findOne(@Param('id', new ObjectIdPipe()) id: string) {
+    return await this.reservationsService.findOne(id);
   }
 
   @Patch(':id')
   @UseGuards(JwtAuthGuard)
-  update(
+  async update(
     @Param('id', new ObjectIdPipe()) id: string,
     @Body() updateReservationDto: UpdateReservationDto,
     @CurrentUser() user?: UserDto,
   ) {
-    return this.reservationsService.update(id, updateReservationDto);
+    return await this.reservationsService.update(
+      id,
+      user._id,
+      updateReservationDto,
+    );
   }
 
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
-  remove(
+  async remove(
     @Param('id', new ObjectIdPipe()) id: string,
     @CurrentUser() user?: UserDto,
   ) {
-    return this.reservationsService.remove(id);
+    return await this.reservationsService.remove(id, user._id);
   }
 }

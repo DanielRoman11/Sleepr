@@ -10,7 +10,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
   app.use(cookieParser());
   app.useLogger(app.get(Logger));
-  const configServie = app.get(ConfigService);
-  await app.listen(configServie.get('HTTP_PORT'));
+  const configService = app.get(ConfigService);
+  await app.listen(configService.get('HTTP_PORT'));
 }
 bootstrap();
