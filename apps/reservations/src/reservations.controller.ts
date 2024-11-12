@@ -31,13 +31,11 @@ export class ReservationsController {
   }
 
   @Get()
-  @UseGuards(JwtAuthGuard)
   async findAll() {
     return await this.reservationsService.findAll();
   }
 
   @Get(':id')
-  @UseGuards(JwtAuthGuard)
   async findOne(@Param('id', new ObjectIdPipe()) id: string) {
     return await this.reservationsService.findOne(id);
   }
