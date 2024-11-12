@@ -4,7 +4,7 @@ import {
   Inject,
   Injectable,
 } from '@nestjs/common';
-import { map, Observable, pipe, tap } from 'rxjs';
+import { map, Observable, tap } from 'rxjs';
 import { ClientProxy } from '@nestjs/microservices';
 import { AUTH_SERVICE } from '../constants';
 import { UserDto } from '../dto';
